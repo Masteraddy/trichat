@@ -1,0 +1,15 @@
+{
+  "name": "trivohchat",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "laravel-echo": "^1.11.7",
+    "pusher-js": "^7.1.0-beta",
+    "vite": "^2.8.0"
+  }
+}

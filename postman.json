@@ -1,0 +1,405 @@
+{
+  "info": {
+    "_postman_id": "4529bb59-1a95-4b49-9648-6393008b6f1c",
+    "name": "Trivoh",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Login",
+      "id": "f2ec658d-caa6-41c0-a25e-16fcf287b6ba",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "https://my.trivoh.com/api/auth/login"
+      },
+      "response": []
+    },
+    {
+      "name": "All conversations",
+      "id": "3b4728fe-060c-448f-95d2-3b2aa7926b6b",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "token": "5EZt96yTzHH9k2kLAnfpaDtAS4BafIXP2GPmZkGm"
+          }
+        },
+        "method": "GET",
+        "header": [],
+        "url": "https://my.trivoh.com/api/chat/conversations"
+      },
+      "response": []
+    },
+    {
+      "name": "View Conversation",
+      "id": "54879da2-e07d-4b1e-8436-ec51b28dea09",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "email",
+              "value": "admin@admin.com",
+              "type": "text"
+            },
+            {
+              "key": "password",
+              "value": "admin",
+              "type": "text"
+            }
+          ]
+        },
+        "url": "https://my.trivoh.com/api/chat/conversation/view/1"
+      },
+      "response": []
+    },
+    {
+      "name": "Members in Group",
+      "id": "851c8ff8-99f3-4a23-913f-f0db38abe011",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "token": "5EZt96yTzHH9k2kLAnfpaDtAS4BafIXP2GPmZkGm"
+          }
+        },
+        "method": "GET",
+        "header": [],
+        "url": "https://my.trivoh.com/api/chat/conversation/users/1"
+      },
+      "response": []
+    },
+    {
+      "name": "Start conversation with user",
+      "id": "d57dd4e6-4c59-4e4c-9b96-5c600c9ff222",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "token": "5EZt96yTzHH9k2kLAnfpaDtAS4BafIXP2GPmZkGm"
+          }
+        },
+        "method": "GET",
+        "header": [],
+        "url": "https://my.trivoh.com/api/chat/contact/2"
+      },
+      "response": []
+    },
+    {
+      "name": "New Conversation(group)",
+      "id": "ab22f0a8-e00e-4c0f-a9d8-1d09c06a95d0",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "token": "5EZt96yTzHH9k2kLAnfpaDtAS4BafIXP2GPmZkGm"
+          }
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "title",
+              "value": "My first group",
+              "type": "text"
+            },
+            {
+              "key": "parent",
+              "value": "1",
+              "type": "text"
+            }
+          ]
+        },
+        "url": "https://my.trivoh.com/api/chat/new/conversation"
+      },
+      "response": []
+    },
+    {
+      "name": "Add users in group",
+      "id": "61a45260-4d1f-47bf-9786-b53a81d57a7b",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "token": "5EZt96yTzHH9k2kLAnfpaDtAS4BafIXP2GPmZkGm"
+          }
+        },
+        "method": "GET",
+        "header": [],
+        "url": "https://my.trivoh.com/api/chat/user/add/1/2"
+      },
+      "response": []
+    },
+    {
+      "name": "Join a group",
+      "id": "c4d32bbe-93cd-418e-acb3-2a2f0176590e",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "token": "5EZt96yTzHH9k2kLAnfpaDtAS4BafIXP2GPmZkGm"
+          }
+        },
+        "method": "GET",
+        "header": [],
+        "url": "https://my.trivoh.com/api/chat/user/join/1"
+      },
+      "response": []
+    },
+    {
+      "name": "Remove user from group",
+      "id": "830aa944-3133-4c51-99a0-51c020be5819",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "token": "5EZt96yTzHH9k2kLAnfpaDtAS4BafIXP2GPmZkGm"
+          }
+        },
+        "method": "GET",
+        "header": [],
+        "url": "https://my.trivoh.com/api/chat/user/remove/1/2"
+      },
+      "response": []
+    },
+    {
+      "name": "Send message in conversation Copy",
+      "id": "0655ea67-0ab5-436c-900c-bf37a7a2ef62",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "token": "5EZt96yTzHH9k2kLAnfpaDtAS4BafIXP2GPmZkGm"
+          }
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "message",
+              "value": "this is first message from user 1 to 2 in c 1",
+              "type": "text"
+            }
+          ]
+        },
+        "url": "https://my.trivoh.com/api/chat/conversation/send/1"
+      },
+      "response": []
+    },
+    {
+      "name": "Edit my own message",
+      "id": "1608513d-afac-4123-8d22-bfffe64b5cb2",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "token": "5EZt96yTzHH9k2kLAnfpaDtAS4BafIXP2GPmZkGm"
+          }
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "message",
+              "value": "I am updating ",
+              "type": "text"
+            }
+          ]
+        },
+        "url": "https://my.trivoh.com/api/chat/edit/1/1"
+      },
+      "response": []
+    },
+    {
+      "name": "Delete locally",
+      "id": "65b24826-4f8a-47ce-b223-7194637f76d4",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "token": "5EZt96yTzHH9k2kLAnfpaDtAS4BafIXP2GPmZkGm"
+          }
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "message_id",
+              "value": "1",
+              "type": "text"
+            },
+            {
+              "key": "conversation_id",
+              "value": "1",
+              "type": "text"
+            }
+          ]
+        },
+        "url": "https://my.trivoh.com/api/chat/delete-message-locally"
+      },
+      "response": []
+    },
+    {
+      "name": "Delete globally",
+      "id": "4eef2534-64bf-4474-ba3c-9aa0450c0116",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "token": "5EZt96yTzHH9k2kLAnfpaDtAS4BafIXP2GPmZkGm"
+          }
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "conversation_id",
+              "value": "1",
+              "type": "text"
+            },
+            {
+              "key": "message_id",
+              "value": "1",
+              "type": "text"
+            }
+          ]
+        },
+        "url": "https://my.trivoh.com/api/chat/delete-message-globally"
+      },
+      "response": []
+    },
+    {
+      "name": "Delete conversation",
+      "id": "d63940d7-46ef-487e-9085-a1a4b64d67f2",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "token": "5EZt96yTzHH9k2kLAnfpaDtAS4BafIXP2GPmZkGm"
+          }
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "conversation_id",
+              "value": "1",
+              "type": "text"
+            }
+          ]
+        },
+        "url": "https://my.trivoh.com/api/chat/delete-conversation"
+      },
+      "response": []
+    },
+    {
+      "name": "Rename group",
+      "id": "302d07fd-f734-4eac-a119-d43ec7dd3825",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "token": "5EZt96yTzHH9k2kLAnfpaDtAS4BafIXP2GPmZkGm"
+          }
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "title",
+              "value": "updated group",
+              "type": "text"
+            }
+          ]
+        },
+        "url": "https://my.trivoh.com/api/chat/conversation/rename/1"
+      },
+      "response": []
+    },
+    {
+      "name": "Change image of group",
+      "id": "43d39627-3680-400b-977f-382c618f6cf0",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "token": "5EZt96yTzHH9k2kLAnfpaDtAS4BafIXP2GPmZkGm"
+          }
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "image",
+              "type": "file",
+              "src": "/home/jaleel/IMG_20210604_223025898.jpg"
+            }
+          ]
+        },
+        "url": "https://my.trivoh.com/api/chat/conversation/avatar/1"
+      },
+      "response": []
+    },
+    {
+      "name": "Search message in all conversations",
+      "id": "24c9fd6f-6387-4122-857f-c3bdb9ff6e62",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "token": "5EZt96yTzHH9k2kLAnfpaDtAS4BafIXP2GPmZkGm"
+          }
+        },
+        "method": "GET",
+        "header": [],
+        "url": "https://my.trivoh.com/api/chat/search/first"
+      },
+      "response": []
+    },
+    {
+      "name": "Ban/unban users",
+      "id": "d9895d80-6a59-417a-9d14-f5ac7559fcf1",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "token": "5EZt96yTzHH9k2kLAnfpaDtAS4BafIXP2GPmZkGm"
+          }
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "user_id",
+              "value": "2",
+              "type": "text"
+            }
+          ]
+        },
+        "url": "https://my.trivoh.com/api/user/ban"
+      },
+      "response": []
+    }
+  ]
+}
