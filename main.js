@@ -1,5 +1,4 @@
-// const token = "388|yvsjOL1ttNqoq7EpNGcRIXKXUKp6UjmsjoYRJest";
-const token = "546|VNH2RFEu7FEauRbn43X8U88vXVe80r9Uql63fQPr";
+const token = ""; //The token gotten from login
 let param = new URLSearchParams(location.search);
 let cid = param.get("cid");
 // import Echo from "laravel-echo";
