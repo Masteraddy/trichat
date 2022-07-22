@@ -1,34 +1,48 @@
-const token = ""; //The token gotten from login
+// const url = "https://my.trivoh.com";
+// const token = "546|VNH2RFEu7FEauRbn43X8U88vXVe80r9Uql63fQPr";
+
+// const url = "http://localhost:3030";
+const url = "https://trivoh-api.azurewebsites.net";
+const urlObj = new URL(url);
+const token =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjU4LCJlbWFpbCI6ImFkZHltYWlsdGVzdEBnbWFpbC5jb20iLCJpYXQiOjE2NTg1MzA0MTksImV4cCI6MTY1OTEzNTIxOX0.o7MfVagkT68ymABbKTtlsGu_l7hAYBbDIASV4_c8zok";
 let param = new URLSearchParams(location.search);
 let cid = param.get("cid");
-// import Echo from "laravel-echo";
-// import Pusher from "pusher-js";
 
-// window.Pusher = Pusher;
+function connectWebSocket() {
+  const wsProtocol = urlObj.protocol.includes("s") ? "wss://" : "ws://";
+  let wsurl = `${wsProtocol}${urlObj.hostname}`;
+  const ws = new WebSocket(wsurl, token);
+  window.ws = ws;
+  ws.onmessage = (resp) => {
+    const response = JSON.parse(resp.data);
+    if (response.meta == "message") {
+      if (response.message.user_id == window.uid?.user?.id) {
+        chatMessages(response, true);
+        document.getElementById("chat-message-input").value = "";
+        getAllUserConversations();
+      } else {
+        chatMessages(response);
+      }
+    }
+  };
 
-// window.Echo = new Echo({
-//   broadcaster: "pusher",
-//   key: "chat",
-//   wsHost: "198.244.143.6",
-//   wsPort: 6001,
-//   disableStats: true,
-//   forceTLS: false,
-//   encrypted: true,
-// });
+  // web socket log error
+  ws.onerror = (err) => {
+    console.log(err);
+  };
 
-// window.Echo = new Echo({
-//   broadcaster: "pusher",
-//   key: "trivoh",
-//   cluster: "1198.244.143.6:6001/app",
-//   forceTLS: false,
-// });
+  window.onbeforeunload = () => {
+    ws.close();
+  };
 
-// window.addEventListener("DOMContentLoaded", (event) => {
-//   console.log("DOM fully loaded and parsed");
-//   Echo.channel(`conversation.${cid}`).listen("Chat", (e) => {
-//     console.log(e);
-//   });
-// });
+  //reconnect 5 seconds web socket is closed
+  ws.onclose = () => {
+    setTimeout(() => {
+      connectWebSocket();
+    }, 5000);
+  };
+}
 
 const form = document.querySelector("form#cbox");
 
@@ -48,11 +62,11 @@ function getConversation(id) {
     document.getElementById("mobile-chatlist").classList.add("d-none");
   }
   axios
-    .get(`https://my.trivoh.com/api/chat/conversation/view/${cid || id}`, {
+    .get(`${url}/api/chat/conversation/view/${cid || id}`, {
       headers: { authorization: `Bearer ${token}` },
     })
     .then(({ data }) => {
-      // console.log(data.data);,.
+      // console.log(data.data);
       let messages = data.data.messages || [];
       let chatCover = document.getElementById("chat-cover");
 
@@ -76,45 +90,39 @@ form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const message = document.getElementById("chat-message-input").value;
   let dform = { message };
-  // const formData = new FormData(form);
-  // for (var [key, value] of formData.entries()) {
-  //   console.log(key, value);
-  //   formData.append(key, value);
-  // }
-  // let response = await fetch(`https://my.trivoh.com/api/chat/conversation/send/${cid}`, {
-  //   // headers: {
-  //   //   "Content-Type": "multipart/form-data",
-  //   // },
-  //   method: "POST",
-  //   body: formData,
-  // });
-  // let result = await response.json();
-  // console.log(result);
-  // alert(result.message);
-  axios
-    .post(`https://my.trivoh.com/api/chat/conversation/send/${cid}`, dform, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-        // "multipart/form-data; boundary=----WebKitFormBoundaryB0I4rlXFLIHmQLOf",
-      },
-    })
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((err) => {
-      console.log(err);
-      console.log(err.message);
-    });
+
+  let tbsent = {
+    message: message, // Message text to be sent to other user
+    meta: "message", // Will be "message" for messaging or "call" for call or empty for others
+    room: cid, // Conversation id
+  };
+  ws.send(JSON.stringify(tbsent));
+  // axios
+  //   .post(`${url}/api/chat/conversation/send/${cid}`, dform, {
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //       "Content-Type": "application/json",
+  //       // "multipart/form-data; boundary=----WebKitFormBoundaryB0I4rlXFLIHmQLOf",
+  //     },
+  //   })
+  //   .then(({ data }) => {
+  //     chatMessages(data.data, true);
+  //     document.getElementById("chat-message-input").value = "";
+  //     getAllUserConversations();
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //     console.log(err.message);
+  //   });
 });
 
 function getAllUserConversations() {
   axios
-    .get("https://my.trivoh.com/api/chat/conversations", {
+    .get(`${url}/api/chat/conversations`, {
       headers: { authorization: `Bearer ${token}` },
     })
     .then(({ data }) => {
-      // console.log(data);
+      console.log(data);
       data.data.map((v, i) => chatListEl(v, "chatlist", i));
       data.data.map((v, i) => chatListEl(v, "mobile-chatlist", i));
     })
@@ -123,13 +131,13 @@ function getAllUserConversations() {
 
 function getAllUserContacts() {
   axios
-    .get("https://my.trivoh.com/api/chat/contacts", {
+    .get(`${url}/api/chat/contacts`, {
       headers: { authorization: `Bearer ${token}` },
     })
     .then(({ data }) => {
-      console.log(data.data);
+      // console.log(data.data);
       data.data.map((v, i) => contactListEl(v, "contact-list", i));
-      data.data.map((v, i) => contactListEl(v, "mobi-contact-list", i));
+      // data.data.map((v, i) => contactListEl(v, "mobi-contact-list", i));
     })
     .catch((error) => console.error(error));
 }
@@ -160,8 +168,14 @@ function chatMessages(message, i) {
     div.classList = "d-flex justify-content-end";
     let element = `
     <div class="d-flex flex-column">
-      <div style="color: white" class="p-2 m-1 px-3 bg-trivoh rounded-pill">${dt.message.body}</div>
-      <p style="font-size: x-small;">${dt.message.created_at}</p>
+      <div style="color: white" class="p-2 m-1 px-3 bg-trivoh rounded-pill">${
+        dt.message.body
+      }</div>
+      <p style="font-size: x-small;">${new Date(
+        dt.updated_at
+      ).toLocaleTimeString()} ${new Date(
+      dt.updated_at
+    ).toLocaleDateString()}</p>
       </div>`;
     div.innerHTML = element;
     return div;
@@ -174,18 +188,25 @@ function chatMessages(message, i) {
     <div class="d-flex flex-column">
     <img
       src=${dt.message.sender.avatar}
+      onError="this.onerror=null;this.src='${url}/files/users/default.png';"
       alt="user"
       style="width: 1.2rem; height: 1.2rem; border-radius: 100%"
     />
-    <div style="background-color: white" class="p-2 px-3 m-1 rounded-pill">${dt.message.body}</div>
-      <p style="font-size: x-small;">${dt.message.created_at}</p>
+    <div style="background-color: white" class="p-2 px-3 m-1 rounded-pill">${
+      dt.message.body
+    }</div>
+      <p style="font-size: x-small;">${new Date(
+        dt.updated_at
+      ).toLocaleDateString()} ${new Date(
+      dt.updated_at
+    ).toLocaleTimeString()}</p>
     </div>
   `;
     div.innerHTML = element;
     return div;
   };
 
-  if (message.from_id == message.user_id) {
+  if (message.from_id == message.user_id || i) {
     chatCover.append(sender(message));
   } else {
     chatCover.append(receiver(message));
@@ -198,6 +219,7 @@ function chatHeader(conv) {
   <div class="" style="width: 3.7rem;  border-radius: 100%; overflow: hidden">
     <img
       src="${conv.image_url}"
+      onError="this.onerror=null;this.src='${url}/files/users/default.png';"
       alt="user profile"
       style="width: 100%; height: 2.7rem; object-fit: cover;"
     />
@@ -238,6 +260,7 @@ function chatListEl(v, id, i) {
   <div style="width: 4.7rem; border-radius: 100%; overflow: hidden">
   <img
     src="${v.image_url}"
+    onError="this.onerror=null;this.src='${url}/files/users/default.png';"
     alt="user profile"
     style="width: 100%; height: 2.7rem"
   />
@@ -272,14 +295,12 @@ function contactListEl(v, id, i) {
   div.className =
     "contact-item d-flex px-1 flex-column justify-content-center align-items-center";
   div.onclick = () => {
-    console.log(v);
     axios
-      .get(`https://my.trivoh.com/api/chat/contact/${v.contact_user_id}`, {
+      .get(`${url}/api/chat/contact/${v.contact_user_id}`, {
         headers: { authorization: `Bearer ${token}` },
       })
       .then(({ data }) => {
         let dt = data.data;
-        console.log(dt.conversation.id);
         cid = dt.conversation.id;
         getConversation(dt.conversation.id);
         history.pushState(null, "", `?cid=${dt.conversation.id}`);
@@ -294,6 +315,7 @@ function contactListEl(v, id, i) {
     <div  style="width: 2.7rem; overflow: hidden; position: relative">
       <img
         src="${v.avatar_url}"
+        onError="this.onerror=null;this.src='${url}/files/users/default.png';"
         alt="user profile"
         style="width: 2.7rem; height: 2.7rem; border-radius: 100%"
       />
@@ -318,5 +340,18 @@ function contactListEl(v, id, i) {
         ">${v.name}</span>`;
   div.innerHTML = contactList;
   document.getElementById(id).appendChild(div);
-  contactEv();
 }
+
+function getUser() {
+  let data = axios
+    .get(`${url}/api/auth/user`, {
+      headers: { authorization: `Bearer ${token}` },
+    })
+    .then((res) => res.data);
+  return data;
+}
+
+(async () => {
+  window.uid = await getUser();
+  connectWebSocket();
+})();
